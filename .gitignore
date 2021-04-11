@@ -1,0 +1,8 @@
+# Project exclude paths
+/common_eureka/target/
+/common_mapper/target/
+/common_pojo/target/
+/common_utils/target/
+/usian_item_feign/target/
+/usian_item_service/target/
+/usian_item_web/target/
