@@ -12,7 +12,27 @@
     </select>
     <!--分页查询tbitem表-->
     <select id="selectTbItemAllByPage" resultType="com.usian.pojo.TbItem">
-        select *
-        from tb_item
+        select i.*,
+               c.name cname
+        from usian.tb_item i,
+             tb_item_cat c
+        where i.cid = c.id
+          and i.status = 1
+        order by i.updated desc
+    </select>
+    <!--添加商品，主键id是通过工具类生成的，不需要自己返回-->
+    <insert id="insertTbItem">
+        insert into usian.tb_item (id, title, sell_point, price, num, barcode, image, cid, created, updated)
+        values (#{id}, #{title}, #{sellPoint}, #{price}, #{num}, #{barcode},
+                #{image}, #{cid}, now(), now());
+    </insert>
+    <!--根据ID查询需要修改的商品信息-->
+    <select id="queryByItemId" resultType="com.usian.pojo.TbItem">
+        select i.*,
+               c.name cname
+        from usian.tb_item i,
+             tb_item_cat c
+        where i.cid = c.id
+          and i.id = #{itemId}
     </select>
 </mapper>

@@ -4,8 +4,11 @@ import com.usian.pojo.TbItem;
 import com.usian.service.ItemService;
 import com.usian.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * ItemController
@@ -46,5 +49,31 @@ public class ItemController {
     @RequestMapping("/selectTbItemAllByPage")
     public PageResult selectTbItemAllByPage(Integer page, Integer rows) {
         return this.itemService.selectTbItemAllByPage(page, rows);
+    }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description :添加商品信息
+     * @Param : [tbItem, desc, itemParams]
+     * @Author : xy
+     * @Date : 2021/4/12 11:54
+     */
+    @RequestMapping("/insertTbItem")
+    public Integer insertTbItem(@RequestBody TbItem tbItem, String desc, String itemParams) {
+
+        return this.itemService.insertTbItem(tbItem, desc, itemParams);
+    }
+
+    /**
+     * @return : java.util.Map<java.lang.String,java.lang.Object>
+     * @Description :根据商品ID查询商品，商品描述，商品分类，规格参数
+     * @Param : [itemId]
+     * @Author : xy
+     * @Date : 2021/4/12 15:19
+     */
+    @RequestMapping("/preUpdateItem")
+    public Map<String, Object> preUpdateItem(Long itemId) {
+        Map<String, Object> map = this.itemService.preUpdateItem(itemId);
+        return this.itemService.preUpdateItem(itemId);
     }
 }

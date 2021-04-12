@@ -6,4 +6,17 @@
         from usian.tb_item_cat
         where parent_id = #{id};
     </select>
+
+    <select id="queryByItemId" resultType="com.usian.pojo.TbItemCat">
+        select id,
+               parent_id  parentId,
+               name,
+               status,
+               sort_order sortOrder,
+               is_parent  isParent,
+               created,
+               updated
+        from usian.tb_item_cat
+        where id = #{cid};
+    </select>
 </mapper>

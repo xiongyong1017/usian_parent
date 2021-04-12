@@ -52,4 +52,15 @@ public class TbItemParam {
     public void setParamData(String paramData) {
         this.paramData = paramData == null ? null : paramData.trim();
     }
+
+    public TbItemParam(Long id, Long itemCatId, Date created, Date updated, String paramData) {
+        this.id = id;
+        this.itemCatId = itemCatId;
+        this.created = created;
+        this.updated = updated;
+        this.paramData = paramData;
+    }
+
+    public TbItemParam() {
+    }
 }
