@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.usian.mapper.TbItemMapper">
-    <!--根据ID查询tbitem表-->
+    <!--根据ID查询tbitem表 和cat 表，通过关联查询得出分类名称-->
     <select id="selectItemInfo" resultType="com.usian.pojo.TbItem">
-        select *
-        from usian.tb_item
-        where id = #{itemId};
+        select i.*,
+               c.name cname
+        from usian.tb_item i,
+             tb_item_cat c
+        where i.cid = c.id
+          and i.id = #{itemId}
     </select>
     <!--分页查询tbitem表-->
     <select id="selectTbItemAllByPage" resultType="com.usian.pojo.TbItem">
