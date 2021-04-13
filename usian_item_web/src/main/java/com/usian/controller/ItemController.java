@@ -80,4 +80,32 @@ public class ItemController {
         }
         return Result.error("查无结果");
     }
+
+    /**
+     * @Date: 2021/4/13 9:35
+     * 修改商品信息
+     */
+    @RequestMapping("/updateTbItem")
+    public Result updateTbItem(TbItem tbItem, String desc, String itemParams) {
+        Integer insertTbItemNum = itemServiceFeign.updateTbItem(tbItem, desc, itemParams);
+        if (insertTbItemNum == 3) {
+            return Result.ok();
+        }
+        return Result.error("修改失败");
+    }
+
+    /**
+     * 根据itemId删除商品信息
+     *
+     * @param itemId
+     * @return result
+     */
+    @RequestMapping("/deleteItemById")
+    public Result deleteItemById(Long itemId) {
+        Integer deleteNum = itemServiceFeign.deleteItemById(itemId);
+        if (deleteNum == 1) {
+            return Result.ok();
+        }
+        return Result.error("删除失败");
+    }
 }

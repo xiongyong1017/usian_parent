@@ -60,7 +60,6 @@ public class ItemController {
      */
     @RequestMapping("/insertTbItem")
     public Integer insertTbItem(@RequestBody TbItem tbItem, String desc, String itemParams) {
-
         return this.itemService.insertTbItem(tbItem, desc, itemParams);
     }
 
@@ -75,5 +74,29 @@ public class ItemController {
     public Map<String, Object> preUpdateItem(Long itemId) {
         Map<String, Object> map = this.itemService.preUpdateItem(itemId);
         return this.itemService.preUpdateItem(itemId);
+    }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description :  修改商品信息
+     * @Param : [tbItem, desc, itemParams]
+     * @Author : xy
+     * @Date : 2021/4/13 8:55
+     */
+    @RequestMapping("/updateTbItem")
+    public Integer updateTbItem(@RequestBody TbItem tbItem, String desc, String itemParams) {
+        return this.itemService.updateTbItem(tbItem, desc, itemParams);
+    }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description :  根据ID删除的方法
+     * @Param : [itemId]
+     * @Author : xy
+     * @Date : 2021/4/13 14:15
+     */
+    @RequestMapping("/deleteItemById")
+    public Integer deleteItemById(Long itemId) {
+        return this.itemService.deleteItemById(itemId);
     }
 }

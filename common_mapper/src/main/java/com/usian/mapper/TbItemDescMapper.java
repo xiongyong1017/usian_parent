@@ -11,4 +11,6 @@ public interface TbItemDescMapper {
     Integer insertDesc(TbItemDesc tbItemDesc);
 
     TbItemDesc queryByItemId(Long itemId);
+
+    Integer updateDesc(TbItemDesc tbItemDesc);
 }

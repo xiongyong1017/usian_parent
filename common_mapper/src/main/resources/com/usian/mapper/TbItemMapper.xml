@@ -35,4 +35,24 @@
         where i.cid = c.id
           and i.id = #{itemId}
     </select>
+    <!--根据ID修改商品信息-->
+    <update id="updateTbItem">
+        update usian.tb_item
+        set title= #{title},
+            sell_point= #{sellPoint},
+            price= #{price},
+            num= #{num},
+            barcode= #{barcode},
+            image= #{image},
+            cid= #{cid},
+            updated= now()
+        where id = #{id};
+    </update>
+
+    <update id="deleteItemById">
+        update usian.tb_item
+        set status=3,
+            updated= now()
+        where id = #{id};
+    </update>
 </mapper>

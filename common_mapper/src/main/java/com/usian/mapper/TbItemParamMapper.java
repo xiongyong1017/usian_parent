@@ -11,7 +11,5 @@ import java.util.List;
  */
 public interface TbItemParamMapper {
 
-    Integer insertParam(TbItemParam tbItemParam);
-
-    List<TbItemParamItem> queryByItemId(Long itemId);
+    List<TbItemParam> selectItemParamByItemCatId(Long itemCatId);
 }

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.usian.mapper.TbItemParamMapper">
-    <insert id="insertParam">
-        insert into usian.tb_item_param_item(id, item_id, param_data, created, updated)
-        values (#{id}, #{itemCatId}, #{paramData}, #{created}, #{updated});
-    </insert>
 
-    <select id="queryByItemId" resultType="com.usian.pojo.TbItemParamItem">
-        select id, item_id itemId, param_data paramData, created, updated
-        from usian.tb_item_param_item
-        where item_id = #{itemId};
+    <!--商品规格模板查询-->
+    <select id="selectItemParamByItemCatId" resultType="com.usian.pojo.TbItemParam">
+        select id, item_cat_id itemCatId, param_data paramData, created, updated
+        from usian.tb_item_param
+        where item_cat_id = #{itemCatId};
     </select>
 </mapper>

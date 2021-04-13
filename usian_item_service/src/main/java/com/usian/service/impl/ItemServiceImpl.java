@@ -2,10 +2,7 @@ package com.usian.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.usian.mapper.TbItemCatMapper;
-import com.usian.mapper.TbItemDescMapper;
-import com.usian.mapper.TbItemMapper;
-import com.usian.mapper.TbItemParamMapper;
+import com.usian.mapper.*;
 import com.usian.pojo.*;
 import com.usian.service.ItemService;
 import com.usian.utils.IDUtils;
@@ -45,6 +42,9 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private TbItemCatMapper tbItemCatMapper;
 
+    @Autowired
+    private TbItemParamItemMapper tbItemParamItemMapper;
+
     @Override
     public TbItem selectItemInfo(Long itemId) {
         return tbItemMapper.selectItemInfo(itemId);
@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
      *
      * @param page
      * @param rows
-     * @return
+     * @return PageResult
      */
     @Override
     public PageResult selectTbItemAllByPage(Integer page, Integer rows) {
@@ -112,10 +112,21 @@ public class ItemServiceImpl implements ItemService {
          * @Date: 2021/4/12 14:15
          * Step 3: 添加商品规格信息(tb_item_param_item表)
          */
-        Integer tbItemParamItemNum = tbItemParamMapper.insertParam(new TbItemParam(null, itemId, date, date, itemParams));
+        Integer tbItemParamItemNum = tbItemParamItemMapper.insertParam(new TbItemParamItem(null, itemId, date, date, itemParams));
+        /**
+         * @Date: 2021/4/13 9:05
+         * Step 4: 返回结果信息，当结果为3时说明全部添加成功
+         */
         return tbItemNum + tbItemDescNum + tbItemParamItemNum;
     }
 
+    /**
+     * @return : java.util.Map<java.lang.String,java.lang.Object>
+     * @Description : 修改回显
+     * @Param : [itemId]
+     * @Author : xy
+     * @Date : 2021/4/13 9:08
+     */
     @Override
     public Map<String, Object> preUpdateItem(Long itemId) {
         /**
@@ -145,7 +156,7 @@ public class ItemServiceImpl implements ItemService {
          * @Date: 2021/4/12 15:27
          * Step 4: 根据商品ID查询商品规格信息,判空之后，将结果放到map中
          */
-        List<TbItemParamItem> paramItems = this.tbItemParamMapper.queryByItemId(itemId);
+        List<TbItemParamItem> paramItems = this.tbItemParamItemMapper.queryByItemId(itemId);
         if (paramItems != null && paramItems.size() > 0) {
             map.put("itemParamItem", paramItems.get(0).getParamData());
         }
@@ -154,5 +165,58 @@ public class ItemServiceImpl implements ItemService {
          * Step 5: 返回结果
          */
         return map;
+    }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description : 修改商品业务层
+     * @Param : [tbItem, desc, itemParams]
+     * @Author : xy
+     * @Date : 2021/4/13 8:58
+     */
+    @Override
+    public Integer updateTbItem(TbItem tbItem, String desc, String itemParams) {
+        /**
+         * @Date: 2021/4/13 9:00
+         * Step 0: 定义时间的全局变量
+         */
+        Date date = new Date();
+        /**
+         * @Date: 2021/4/13 9:00
+         * Step 1: 根据商品ID修改商品信息(tb_item表)
+         */
+        Integer tbItemNum = tbItemMapper.updateTbItem(tbItem);
+        /**
+         * @Date: 2021/4/13 9:02
+         * Step 2: 根据商品ID修改商品描述(tb_item_desc表)
+         */
+        Integer tbItemDescNum = tbItemDescMapper.updateDesc(new TbItemDesc(tbItem.getId(), date, date, desc));
+        /**
+         * @Date: 2021/4/13 9:04
+         * Step 3: 根据商品ID修改商品规格信息
+         */
+        Integer tbItemParamItemNum = tbItemParamItemMapper.updateParam(new TbItemParamItem(null, tbItem.getId(), date, date, itemParams));
+        /**
+         * @Date: 2021/4/13 9:05
+         * Step 4: 返回结果信息，当结果为3时说明全部修改成功
+         */
+        return tbItemNum + tbItemDescNum + tbItemParamItemNum;
+    }
+
+    @Override
+    /**
+     * @Description : 根据ID删除（其实是修改，将商品对应的状态调整为3）
+     * @Param : [itemId]
+     * @return : java.lang.Integer
+     * @Author : xy
+     * @Date : 2021/4/13 14:16
+     */
+    public Integer deleteItemById(Long itemId) {
+        /**
+         * @Date: 2021/4/13 14:19
+         * Step 1: 删除（修改）商品信息(tb_item表)
+         */
+        Integer tbItemNum = tbItemMapper.deleteItemById(itemId);
+        return tbItemNum;
     }
 }

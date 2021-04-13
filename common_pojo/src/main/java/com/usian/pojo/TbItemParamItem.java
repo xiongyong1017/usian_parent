@@ -63,4 +63,15 @@ public class TbItemParamItem {
                 ", paramData='" + paramData + '\'' +
                 '}';
     }
+
+    public TbItemParamItem(Long id, Long itemId, Date created, Date updated, String paramData) {
+        this.id = id;
+        this.itemId = itemId;
+        this.created = created;
+        this.updated = updated;
+        this.paramData = paramData;
+    }
+
+    public TbItemParamItem() {
+    }
 }

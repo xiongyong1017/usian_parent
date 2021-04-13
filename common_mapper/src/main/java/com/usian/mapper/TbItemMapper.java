@@ -5,7 +5,7 @@ import com.usian.pojo.TbItem;
 import java.util.List;
 
 /**
- * @Description TbItem的mapper接口
+ * @Description ： TbItem的mapper接口
  */
 public interface TbItemMapper {
 
@@ -16,4 +16,8 @@ public interface TbItemMapper {
     Integer insertTbItem(TbItem tbItem);
 
     TbItem queryByItemId(Long itemId);
+
+    Integer updateTbItem(TbItem tbItem);
+
+    Integer deleteItemById(Long itemId);
 }
