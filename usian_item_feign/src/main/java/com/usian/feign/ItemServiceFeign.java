@@ -23,14 +23,14 @@ public interface ItemServiceFeign {
     @GetMapping("/service/item/selectTbItemAllByPage")
     PageResult selectTbItemAllByPage(@RequestParam Integer page,
                                      @RequestParam Integer rows);
-
-    @RequestMapping("/service/itemCategory/selectItemCategoryByParentId")
-    List<TbItemCat> selectItemCategoryByParentId(@RequestParam Long id);
-
     @GetMapping("/service/item/insertTbItem")
     Integer insertTbItem(@RequestBody TbItem tbItem,
                          @RequestParam String desc,
                          @RequestParam String itemParams);
+
+    @RequestMapping("/service/itemCategory/selectItemCategoryByParentId")
+    List<TbItemCat> selectItemCategoryByParentId(@RequestParam Long id);
+
 
     @PostMapping("/service/itemParam/selectItemParamByItemCatId")
     TbItemParam selectItemParamByItemCatId(@RequestParam("itemCatId") Long itemCatId);
