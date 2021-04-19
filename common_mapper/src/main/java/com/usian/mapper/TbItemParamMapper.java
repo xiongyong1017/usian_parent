@@ -12,4 +12,10 @@ import java.util.List;
 public interface TbItemParamMapper {
 
     List<TbItemParam> selectItemParamByItemCatId(Long itemCatId);
+
+    List<TbItemParam> selectItemParamAll();
+
+    Integer insertItemParam(TbItemParam tbItemParam);
+
+    Integer deleteItemParamById(Long itemCatId);
 }

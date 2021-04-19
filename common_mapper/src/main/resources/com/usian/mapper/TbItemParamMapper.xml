@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.usian.mapper.TbItemParamMapper">
-
-    <!--商品规格模板查询-->
+    <!--根据ID查询商品规格模板-->
     <select id="selectItemParamByItemCatId" resultType="com.usian.pojo.TbItemParam">
         select id, item_cat_id itemCatId, param_data paramData, created, updated
         from usian.tb_item_param
         where item_cat_id = #{itemCatId};
     </select>
+    <!--商品规格模板查询-->
+    <select id="selectItemParamAll" resultType="com.usian.pojo.TbItemParam">
+        select id, item_cat_id itemCatId, param_data paramData, created, updated
+        from usian.tb_item_param
+    </select>
+    <!--添加商品模板信息-->
+    <insert id="insertItemParam">
+        insert into usian.tb_item_param(id, item_cat_id, param_data, created, updated)
+        values (null, #{itemCatId}, #{paramData}, #{created}, #{updated});
+    </insert>
+    <!--删除商品模板信息-->
+    <delete id="deleteItemParamById">
+        delete
+        from usian.tb_item_param
+        where item_cat_id = #{itemCatId};
+    </delete>
 </mapper>

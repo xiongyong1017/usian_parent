@@ -23,6 +23,7 @@ public interface ItemServiceFeign {
     @GetMapping("/service/item/selectTbItemAllByPage")
     PageResult selectTbItemAllByPage(@RequestParam Integer page,
                                      @RequestParam Integer rows);
+
     @GetMapping("/service/item/insertTbItem")
     Integer insertTbItem(@RequestBody TbItem tbItem,
                          @RequestParam String desc,
@@ -46,4 +47,14 @@ public interface ItemServiceFeign {
     @GetMapping("/service/item/deleteItemById")
     Integer deleteItemById(@RequestParam("itemId") Long itemId);
 
+    @GetMapping("/service/itemParam/selectItemParamAll")
+    PageResult selectItemParamAll(@RequestParam Integer page,
+                                  @RequestParam Integer rows);
+
+    @RequestMapping("/service/itemParam/insertItemParam")
+    Integer insertItemParam(@RequestParam Long itemCatId,
+                            @RequestParam String paramData);
+
+    @RequestMapping("/service/itemParam/deleteItemParamById")
+    Integer deleteItemParamById(Long itemCatId);
 }
