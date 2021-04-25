@@ -54,8 +54,20 @@ public class ContentCategoryController {
      * @Author : xy
      * @Date : 2021/4/18 21:19
      */
-    @RequestMapping("deleteContentCategoryById")
+    @RequestMapping("/deleteContentCategoryById")
     public Integer deleteContentCategoryById(Long categoryId) {
         return this.contentCategoryService.deleteContentCategoryById(categoryId);
+    }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description : 修改分类信息
+     * @Param : [tbContentCategory]
+     * @Author : xy
+     * @Date : 2021/4/19 9:38
+     */
+    @RequestMapping("/updateContentCategory")
+    public Integer updateContentCategory(@RequestBody TbContentCategory tbContentCategory) {
+        return this.contentCategoryService.updateContentCategory(tbContentCategory);
     }
 }

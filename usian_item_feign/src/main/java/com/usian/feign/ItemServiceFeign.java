@@ -3,6 +3,7 @@ package com.usian.feign;
 import com.usian.pojo.TbItem;
 import com.usian.pojo.TbItemCat;
 import com.usian.pojo.TbItemParam;
+import com.usian.utils.CatResult;
 import com.usian.utils.PageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -57,4 +58,8 @@ public interface ItemServiceFeign {
 
     @RequestMapping("/service/itemParam/deleteItemParamById")
     Integer deleteItemParamById(Long itemCatId);
+
+    @GetMapping("/service/itemCategory/selectItemCategoryAll")
+    CatResult selectItemCategoryAll();
+
 }

@@ -39,10 +39,17 @@
             updated=#{updated}
         where id = #{id};
     </update>
-    <!--s删除分类信息-->
+    <!--删除分类信息-->
     <delete id="deleteById">
         delete
         from usian.tb_content_category
         where id = #{categoryId};
     </delete>
+    <!--修改分类信息-->
+    <update id="updateContentCategory">
+        update usian.tb_content_category
+        set name   =#{name},
+            updated=now()
+        where id = #{id};
+    </update>
 </mapper>

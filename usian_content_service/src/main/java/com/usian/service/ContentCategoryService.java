@@ -17,4 +17,6 @@ public interface ContentCategoryService {
     Integer insertContentCategory(TbContentCategory tbContentCategory);
 
     Integer deleteContentCategoryById(Long categoryId);
+
+    Integer updateContentCategory(TbContentCategory tbContentCategory);
 }

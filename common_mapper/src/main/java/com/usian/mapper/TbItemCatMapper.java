@@ -9,4 +9,5 @@ public interface TbItemCatMapper {
     List<TbItemCat> selectItemCategoryByParentId(Long id);
 
     TbItemCat queryByItemId(Long cid);
+
 }

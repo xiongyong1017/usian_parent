@@ -2,6 +2,7 @@ package com.usian.controller;
 
 import com.usian.pojo.TbItemParam;
 import com.usian.service.ItemParamService;
+import com.usian.utils.CatResult;
 import com.usian.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,5 +70,6 @@ public class ItemParamController {
     public Integer deleteItemParamById(Long itemCatId) {
         return this.itemParamService.deleteItemParamById(itemCatId);
     }
+
 
 }

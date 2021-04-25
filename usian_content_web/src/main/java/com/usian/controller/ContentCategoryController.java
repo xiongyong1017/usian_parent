@@ -71,4 +71,21 @@ public class ContentCategoryController {
         return Result.error("删除失败");
     }
 
+    /**
+     * @return : com.usian.utils.Result
+     * @Description : 修改商品分类
+     * @Param : [tbContentCategory]
+     * @Author : xy
+     * @Date : 2021/4/19 9:36
+     */
+    @RequestMapping("/updateContentCategory")
+    public Result updateContentCategory(TbContentCategory tbContentCategory) {
+        Integer updateNum = this.contentServiceFeign.updateContentCategory(tbContentCategory);
+        if (updateNum == 1) {
+            return Result.ok();
+        }
+        return Result.error("修改失败");
+    }
+
+
 }

@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.usian.mapper.TbContentMapper" >
-
+<mapper namespace="com.usian.mapper.TbContentMapper">
+    <!--根据分类ID查询商品信息-->
+    <select id="selectTbContentAllByCategoryId" resultType="com.usian.pojo.TbContent">
+        select id,
+               title,
+               sub_title  subTitle,
+               title_desc titleDesc,
+               url,
+               pic,
+               pic2,
+               content,
+               created,
+               updated
+        from usian.tb_content
+        where category_id = #{categoryId}
+    </select>
+    <!--添加当前分类信息-->
+    <insert id="insertTbContent">
+        insert into usian.tb_content(id, category_id, title, sub_title, title_desc, url, pic, pic2, content, created,
+                                     updated)
+        values (null, #{categoryId}, #{title}, #{subTitle}, #{titleDesc}, #{url}, #{pic}, #{pic2}, #{content}, now(),
+                now());
+    </insert>
+    <!--删除分类信息-->
+    <delete id="deleteContentByIds">
+        delete
+        from usian.tb_content
+        where id = #{id};
+    </delete>
+    <!--查询首页大广告-->
+    <select id="selectFrontendContentByAD" resultType="com.usian.pojo.TbContent">
+        select id,
+               category_id categoryId,
+               title,
+               sub_title   subTitle,
+               title_desc  titleDesc,
+               url,
+               pic,
+               pic2,
+               content,
+               created,
+               updated
+        from usian.tb_content
+        where category_id = #{ad_category_id};
+    </select>
 </mapper>

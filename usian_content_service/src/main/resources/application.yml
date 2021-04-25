@@ -38,4 +38,9 @@ ribbon:
   #开启eureka负载均衡策略enabled:true
   eureka:
     enabled: true #解决错误 com.netflix.client.ClientException: Load balancer does not have available server for client:usian-item-service
-
+#大广告位图片信息
+AD_CATEGORY_ID: 89
+AD_HEIGHT: 240
+AD_WIDTH: 670
+AD_HEIGHTB: 240
+AD_WIDTHB: 550

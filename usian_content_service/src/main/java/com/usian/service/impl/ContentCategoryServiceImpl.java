@@ -99,4 +99,16 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
         }
         return 200;
     }
+
+    /**
+     * @return : java.lang.Integer
+     * @Description : 修改分类信息
+     * @Param : [tbContentCategory]
+     * @Author : xy
+     * @Date : 2021/4/19 10:09
+     */
+    @Override
+    public Integer updateContentCategory(TbContentCategory tbContentCategory) {
+        return this.tbContentCategoryMapper.updateContentCategory(tbContentCategory);
+    }
 }
