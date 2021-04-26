@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.usian.mapper.TbContentMapper;
 import com.usian.pojo.TbContent;
-import com.usian.pojo.TbContentExample;
+import com.usian.redis.RedisClient;
 import com.usian.service.ContentService;
 import com.usian.utils.AdNode;
 import com.usian.utils.PageResult;
@@ -39,6 +39,12 @@ public class ContentServiceImpl implements ContentService {
 
     @Value("${AD_WIDTHB}")
     private Integer AD_WIDTHB;
+
+    @Value("${PORTAL_AD_KEY}")
+    private String PORTAL_AD_KEY;
+
+    @Autowired
+    private RedisClient redisClient;
 
 
     /**
@@ -81,7 +87,10 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public Integer insertTbContent(TbContent tbContent) {
-        return this.tbContentMapper.insertTbContent(tbContent);
+        Integer num = this.tbContentMapper.insertTbContent(tbContent);
+        //缓存同步
+        redisClient.hdel(PORTAL_AD_KEY, AD_CATEGORY_ID.toString());
+        return num;
     }
 
     /**
@@ -93,7 +102,10 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public Integer deleteContentByIds(Long id) {
-        return this.tbContentMapper.deleteContentByIds(id);
+        Integer num = this.tbContentMapper.deleteContentByIds(id);
+        //缓存同步
+        redisClient.hdel(PORTAL_AD_KEY, AD_CATEGORY_ID.toString());
+        return num;
     }
 
     /**
@@ -105,7 +117,12 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public List<AdNode> selectFrontendContentByAD() {
-        // 查询TbContent
+        //查询缓存
+        List<AdNode> adNodeListRedis = (List<AdNode>) redisClient.hget(PORTAL_AD_KEY, AD_CATEGORY_ID.toString());
+        if (adNodeListRedis != null) {
+            return adNodeListRedis;
+        }
+        // 查询TbContent(数据库)
         List<TbContent> tbContentList = tbContentMapper.selectFrontendContentByAD(AD_CATEGORY_ID);
         List<AdNode> adNodeList = new ArrayList<AdNode>();
         for (TbContent tbContent : tbContentList) {
@@ -119,7 +136,8 @@ public class ContentServiceImpl implements ContentService {
             adNode.setWidthB(AD_WIDTHB);
             adNodeList.add(adNode);
         }
+        //添加到缓存
+        redisClient.hset(PORTAL_AD_KEY, AD_CATEGORY_ID.toString(), adNodeList);
         return adNodeList;
     }
-
 }

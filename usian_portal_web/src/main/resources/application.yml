@@ -7,3 +7,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka/
+      #hystrix的超时时间
+      hystrix:
+        enabled: true
+        timeoutInMilliseconds: 60000
+      #ribbon的超时时间
+      ribbon:
+        ReadTimeout: 60000 #读取时间
+        ConnectTimeout: 60000 #连接超时时间
+        #开启eureka负载均衡策略enabled:true
+        eureka:
+          enabled: true #解决错误 com.netflix.client.ClientException: Load balancer does not have available server for client:usian-item-service

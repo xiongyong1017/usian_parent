@@ -21,6 +21,23 @@ spring:
       # 用来检测连接是否有效的sql，要求是一个查询语句，常用select 'x'。如果validationQuery为null，
       # testOnBorrow、testOnReturn、testWhileIdle都不会起作用。
       validation-query: select 1
+  redis:
+    cluster:
+      nodes:
+        - 192.168.2.101:6379
+        - 192.168.2.101:6380
+        - 192.168.2.101:6381
+        - 192.168.2.101:6382
+        - 192.168.2.101:6383
+        - 192.168.2.101:6384
+    jedis:
+      pool:
+        max-active: 20 #连接池最大连接数
+        max-idle: 10 #连接池中的最大空闲连接
+        min-idle: 5 # 连接池中的最小空闲连接
+#配置缓存首页大广告位的 key
+PORTAL_AD_KEY: PORTAL_AD_KEY
+
 server:
   port: 8092
 eureka:

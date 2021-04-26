@@ -1,12 +1,14 @@
 package com.usian.service.impl;
 
+import com.usian.config.RedisConfig;
 import com.usian.mapper.TbItemCatMapper;
 import com.usian.pojo.TbItemCat;
-import com.usian.pojo.TbItemCatExample;
 import com.usian.service.ItemCategoryService;
 import com.usian.utils.CatNode;
 import com.usian.utils.CatResult;
+import com.usian.redis.RedisClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +27,12 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
      */
     @Autowired
     private TbItemCatMapper tbItemCatMapper;
+
+    @Value("${PROTAL_CATRESULT_KEY}")
+    private String PROTAL_CATRESULT_KEY;
+
+    @Autowired
+    private RedisClient redisClient;
 
     /**
      * @return : java.util.List<com.usian.pojo.TbItemCat>
@@ -47,9 +55,17 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
      */
     @Override
     public CatResult selectItemCategoryAll() {
+         //查询缓存
+         CatResult catResultRedis = (CatResult) redisClient.get(PROTAL_CATRESULT_KEY);
+        if (catResultRedis != null) {
+            return catResultRedis;
+        }
         CatResult catResult = new CatResult();
+        System.out.println("hahaha");
         //查询商品分类
         catResult.setData(getCatList(0L));
+        // //添加到缓存
+        redisClient.set(PROTAL_CATRESULT_KEY, catResult);
         return catResult;
     }
 
