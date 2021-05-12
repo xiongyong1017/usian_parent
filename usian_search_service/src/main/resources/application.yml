@@ -38,6 +38,11 @@ spring:
   data:
     elasticsearch:
       cluster-nodes: 192.168.02.101:9200
+  rabbitmq:
+    host: 192.168.2.101
+    username: admin
+    password: 1111
+    virtual-host: /
 #索引名称
 ES_INDEX_NAME: usian
 #类型名称
@@ -53,7 +58,7 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
 #hystrix的超时时间
 hystrix:
-  enabled: true
+  enabled: false
   timeoutInMilliseconds: 30000
 #ribbon的超时时间
 ribbon:
@@ -62,4 +67,3 @@ ribbon:
   #开启eureka负载均衡策略enabled:true
   eureka:
     enabled: true #解决错误 com.netflix.client.ClientException: Load balancer does not have available server for client:usian-item-service
-

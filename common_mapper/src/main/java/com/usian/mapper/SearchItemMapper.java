@@ -9,4 +9,5 @@ public interface SearchItemMapper {
 
     List<SearchItem> getItemList();
 
+    SearchItem getItemById(Long valueOf);
 }

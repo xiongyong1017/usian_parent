@@ -4,10 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.usian.mapper.*;
 import com.usian.pojo.*;
+import com.usian.redis.RedisClient;
 import com.usian.service.ItemService;
 import com.usian.utils.IDUtils;
 import com.usian.utils.PageResult;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,9 +48,93 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private TbItemParamItemMapper tbItemParamItemMapper;
 
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @Value("${ITEM_INFO}")
+    private String ITEM_INFO;
+
+    @Value("${BASE}")
+    private String BASE;
+
+    @Value("${DESC}")
+    private String DESC;
+
+    @Value("${ITEM_INFO_EXPIRE}")
+    private Integer ITEM_INFO_EXPIRE;
+
+    @Autowired
+    private RedisClient redisClient;
+
+    /**
+     * 查询商品信息
+     *
+     * @param : [itemId]
+     * @return : com.usian.pojo.TbItem
+     * @Author : xy
+     * @Date : 2021/5/6 17:06
+     */
     @Override
     public TbItem selectItemInfo(Long itemId) {
-        return tbItemMapper.selectItemInfo(itemId);
+        /**
+         * @Date: 2021/5/6 17:08
+         * Step 1: 查询缓存
+         */
+        TbItem tbItem = (TbItem) redisClient.get(ITEM_INFO + ":" + itemId + ":" + BASE);
+        if (tbItem != null) {
+            return tbItem;
+        }
+        /**
+         * @Date: 2021/5/6 17:09
+         * Step 2: 缓存中没有时查询数据库
+         */
+        tbItem = tbItemMapper.selectItemInfo(itemId);
+        /**
+         * @Date: 2021/5/6 17:11
+         * Step 3: 把数据保存到缓存中,并设置有效期
+         */
+        redisClient.set(ITEM_INFO + ":" + itemId + ":" + BASE, tbItem);
+        redisClient.expire(ITEM_INFO + ":" + itemId + ":" + BASE, ITEM_INFO_EXPIRE);
+        /**
+         * @Date: 2021/5/6 17:12
+         * Step 4: 返回结果
+         */
+        return tbItem;
+    }
+
+    /**
+     * 根据商品 ID 查询商品描述
+     *
+     * @param itemId
+     * @return
+     */
+    @Override
+    public TbItemDesc selectItemDescByItemId(Long itemId) {
+        /**
+         * @Date: 2021/5/6 17:16
+         * Step 1: 查询缓存
+         */
+        TbItemDesc tbItemDesc = (TbItemDesc) redisClient.get(ITEM_INFO + ":" + itemId + ":" + DESC);
+        if (tbItemDesc != null) {
+            return tbItemDesc;
+        }
+        /**
+         * @Date: 2021/5/6 17:16
+         * Step 2: 缓存中没有查询数据库,并将查到的有效信息保存到缓存中，并设置缓存的有效期
+         */
+        List<TbItemDesc> itemDescList = this.tbItemDescMapper.selectItemDescByItemId(itemId);
+        if (itemDescList != null && itemDescList.size() > 0) {
+            //把数据保存到缓存
+            redisClient.set(ITEM_INFO + ":" + itemId + ":" + DESC, itemDescList.get(0));
+            //设置缓存的有效期
+            redisClient.expire(ITEM_INFO + ":" + itemId + ":" + DESC, ITEM_INFO_EXPIRE);
+            return itemDescList.get(0);
+        }
+        /**
+         * @Date: 2021/5/6 17:19
+         * Step 3: 为空则返回null
+         */
+        return null;
     }
 
     /**
@@ -114,15 +201,21 @@ public class ItemServiceImpl implements ItemService {
          */
         Integer tbItemParamItemNum = tbItemParamItemMapper.insertParam(new TbItemParamItem(null, itemId, date, date, itemParams));
         /**
+         * @Date: 2021/5/6 16:13
+         * Step 4: 添加商品发布到mq
+         */
+        amqpTemplate.convertAndSend("item_exchage", "item.add", itemId);
+        /**
          * @Date: 2021/4/13 9:05
-         * Step 4: 返回结果信息，当结果为3时说明全部添加成功
+         * Step 5: 返回结果信息，当结果为3时说明全部添加成功
          */
         return tbItemNum + tbItemDescNum + tbItemParamItemNum;
     }
 
     /**
+     * 修改回显
+     *
      * @return : java.util.Map<java.lang.String,java.lang.Object>
-     * @Description : 修改回显
      * @Param : [itemId]
      * @Author : xy
      * @Date : 2021/4/13 9:08
@@ -203,14 +296,15 @@ public class ItemServiceImpl implements ItemService {
         return tbItemNum + tbItemDescNum + tbItemParamItemNum;
     }
 
-    @Override
     /**
-     * @Description : 根据ID删除（其实是修改，将商品对应的状态调整为3）
-     * @Param : [itemId]
+     * 根据ID删除（其实是修改，将商品对应的状态调整为3）
+     *
      * @return : java.lang.Integer
+     * @Param : [itemId]
      * @Author : xy
      * @Date : 2021/4/13 14:16
      */
+    @Override
     public Integer deleteItemById(Long itemId) {
         /**
          * @Date: 2021/4/13 14:19

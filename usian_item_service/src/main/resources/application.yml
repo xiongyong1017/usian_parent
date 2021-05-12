@@ -35,8 +35,11 @@ spring:
       max-active: 20 #连接池最大连接数
       max-idle: 10 #连接池中的最大空闲连接
       min-idle: 5 # 连接池中的最小空闲连接
-#配置缓存首页商品分类的 key
-PROTAL_CATRESULT_KEY: PROTAL_CATRESULT_KEY
+  rabbitmq:
+    host: 192.168.2.101
+    username: admin
+    password: 1111
+    virtual-host: /
 
 server:
   port: 8090 #端口
@@ -56,7 +59,14 @@ eureka:
       eureka:
         enabled: true #解决错误 com.netflix.client.ClientException: Load balancer does not have available server for client:usian-item-service
 
-
+#配置缓存首页商品分类的 key
+PROTAL_CATRESULT_KEY: PROTAL_CATRESULT_KEY
+#商品详情
+ITEM_INFO: ITEM_INFO
+BASE: BASE
+DESC: DESC
+PARAM: PARAM
+ITEM_INFO_EXPIRE: 86400
 
 
 
